@@ -6,6 +6,8 @@ public class PlayerMovementWASD : PlayerMovement
 {
     [Header("Setting")]
     public float water_power = 2f;
+    [SerializeField] private float maxHeight;
+
 
     public override void move()
     {
@@ -13,7 +15,7 @@ public class PlayerMovementWASD : PlayerMovement
         if(move.sqrMagnitude > 1.0f)
             move.Normalize();
         if(move.x != 0){
-            rb.AddForce(new Vector3(control.movement.x,0,0) * player.speed * Time.deltaTime,ForceMode.Impulse);
+            rb.AddForce(new Vector3(control.movement.x,0,0) * player.current_speed * Time.deltaTime,ForceMode.Impulse);
         }
 
         if(move.y != 0 == false){
@@ -21,7 +23,8 @@ public class PlayerMovementWASD : PlayerMovement
             gravity_custom();
         }
         else{
-            rb.AddForce(new Vector3(0,control.movement.y,0) * (player.speed / 1.5f) * Time.deltaTime,ForceMode.Impulse);
+            // if(transform.position.y > maxHeight) return;
+            rb.AddForce(new Vector3(0,control.movement.y,0) * (player.current_speed) * Time.deltaTime,ForceMode.Impulse);
         }
     }
 
@@ -30,6 +33,7 @@ public class PlayerMovementWASD : PlayerMovement
     }
 
     public override void passive(){
+        base.passive();
         rb.AddForce(-transform.up * water_power, ForceMode.Force);
     }
 }
